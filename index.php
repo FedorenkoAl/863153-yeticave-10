@@ -42,7 +42,13 @@ $lots = [
     "prais" => "5400"
     ],
 ];
+
+function money ($amount){
+    return number_format(ceil($amount),0," "," ") . ' ₽';
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -115,7 +121,7 @@ $lots = [
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?=$value["prais"];?><b class="rub">р</b></span>
+                            <span class="lot__cost"><?=money($value["prais"]);?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
