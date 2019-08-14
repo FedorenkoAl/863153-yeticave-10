@@ -143,4 +143,10 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
+function money ($amount){
+    return number_format(ceil($amount),0," "," ") . ' ₽';
+}
+
+
+
 
