@@ -10,37 +10,43 @@ $lots = [
     ["picture" => "img/lot-1.jpg",
     "category" => "$category[0]",
     "title" => "2014 Rossignol District Snowboard",
-    "prais" => "10999"
+    "prais" => "10999",
+    "data_expiry" => "2019-12-12"
     ],
     [
     "picture" => "img/lot-2.jpg",
     "category" => "$category[0]",
     "title" => "2014 Rossignol District Snowboard",
-    "prais" => "159999"
+    "prais" => "159999",
+    "data_expiry" => "2019-11-12"
     ],
     [
     "picture" => "img/lot-3.jpg",
     "category" => "$category[1]",
     "title" => "Крепления Union Contact Pro 2015 года размер L/XL",
-    "prais" => "8000"
+    "prais" => "8000",
+    "data_expiry" => "2019-09-12"
     ],
     [
     "picture" => "img/lot-4.jpg",
     "category" => "$category[2]",
     "title" => "Ботинки для сноуборда DC Mutiny Charocal",
-    "prais" => "10999"
+    "prais" => "10999",
+    "data_expiry" => "2019-09-22"
     ],
     [
     "picture" => "img/lot-5.jpg",
     "category" => "$category[3]",
     "title" => "Куртка для сноуборда DC Mutiny Charocal",
-    "prais" => "7500"
+    "prais" => "7500",
+    "data_expiry" => "2019-08-14"
     ],
     [
     "picture" => "img/lot-6.jpg",
     "category" => "$category[4]",
     "title" => "Маска Oakley Canopy",
-    "prais" => "5400"
+    "prais" => "5400",
+    "data_expiry" => "2019-11-02"
     ]
 ];
 
