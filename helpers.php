@@ -147,6 +147,7 @@ function money ($amount){
     return number_format(ceil($amount),0," "," ") . ' ₽';
 }
 
+
 function time_end($time_current,$ts_midnight) {
     date_default_timezone_set("Europe/Moscow");
     $secs_to_midnight = $ts_midnight - $time_current;
@@ -155,7 +156,6 @@ function time_end($time_current,$ts_midnight) {
 
     return "$hours : $minutes";
 }
-
 
 
 
