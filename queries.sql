@@ -1,12 +1,12 @@
 -- Добавляем в БД список категорий
-INSERT INTO category (name)
+INSERT INTO category (name, symbol)
    VALUES
-       ('Доски и лыжи'),
-       ('Крепления'),
-       ('Ботинки'),
-       ('Одежда'),
-       ('Инструменты'),
-       ('Разное');
+       ('Доски и лыжи', 'boards'),
+       ('Крепления', 'attachment'),
+       ('Ботинки', 'boots'),
+       ('Одежда', 'clothing'),
+       ('Инструменты', 'tools'),
+       ('Разное', 'other');
 
 -- -- Добавляем в БД список пользователей
 
@@ -69,42 +69,42 @@ VALUES
       ('2019-01-02 9:00:00', 6500, 2, 6);
 
 
--- -- Получаем все категории
-    SELECT * FROM category
-    ORDER BY id ASC;
+-- -- -- Получаем все категории
+--     SELECT * FROM category
+--     ORDER BY id ASC;
 
-  --  Получаем самые новые, открытые лот.Каждый лот должен включать название,
-  -- стартовую цену, ссылку на изображение,
-  -- цену, название категории
+--   --  Получаем самые новые, открытые лот.Каждый лот должен включать название,
+--   -- стартовую цену, ссылку на изображение,
+--   -- цену, название категории
 
-  SELECT l.name, l.price, l.image, MAX(r.price) r, c.name c FROM lots l
-  LEFT JOIN rate r
-  ON r.rate_lots = l.id
-  LEFT JOIN category c
-  ON l.lots_category = c.id
-  GROUP BY l.id ORDER BY l.data_end LIMIT 5;
+--   SELECT l.name, l.price, l.image, MAX(r.price) r, c.name c FROM lots l
+--   LEFT JOIN rate r
+--   ON r.rate_lots = l.id
+--   LEFT JOIN category c
+--   ON l.lots_category = c.id
+--   GROUP BY l.id ORDER BY l.data_end LIMIT 5;
 
- -- ПОЛУЧАЕМ лот по его id И также название категории, к которой принадлежит лот
+--  -- ПОЛУЧАЕМ лот по его id И также название категории, к которой принадлежит лот
 
-  SELECT l.id, l.name, l.price, l.image, c.name c FROM lots l
-  JOIN category c
-  ON l.lots_category = c.id
-  WHERE l.id = 4;
+--   SELECT l.id, l.name, l.price, l.image, c.name c FROM lots l
+--   JOIN category c
+--   ON l.lots_category = c.id
+--   WHERE l.id = 4;
 
 
- -- обновить название лота по его идентификатору;
+--  -- обновить название лота по его идентификатору;
 
-  UPDATE lots SET name = 'Куртка для сноуборда DC Mutiny Charocal'
-  WHERE id = 2;
+--   UPDATE lots SET name = 'Куртка для сноуборда DC Mutiny Charocal'
+--   WHERE id = 2;
 
- -- список самых свежих ставок для лота по его идентификатору
+--  -- список самых свежих ставок для лота по его идентификатору
 
-  SELECT l.id, l.name, r.date_create, r.price, u.name us FROM lots l
-  LEFT JOIN rate r
-  ON r.rate_lots = l.id
-  LEFT JOIN user u
-  ON u.id = r.rate_user
-  WHERE l.id = 6
-  ORDER BY r.date_create DESC LIMIT 5;
+--   SELECT l.id, l.name, r.date_create, r.price, u.name us FROM lots l
+--   LEFT JOIN rate r
+--   ON r.rate_lots = l.id
+--   LEFT JOIN user u
+--   ON u.id = r.rate_user
+--   WHERE l.id = 6
+--   ORDER BY r.date_create DESC LIMIT 5;
 
 

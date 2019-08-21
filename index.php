@@ -1,55 +1,26 @@
 <?php
 
 require_once ('helpers.php');
-$is_auth = rand(0, 1);
 
+$is_auth = rand(0, 1);
 $user_name = 'Алексей'; // укажите здесь ваше имя
 
-$category = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
-$lots = [
-    ["picture" => "img/lot-1.jpg",
-    "category" => "$category[0]",
-    "title" => "2014 Rossignol District Snowboard",
-    "prais" => "10999",
-    "data_expiry" => "2019-12-12"
-    ],
-    [
-    "picture" => "img/lot-2.jpg",
-    "category" => "$category[0]",
-    "title" => "2014 Rossignol District Snowboard",
-    "prais" => "159999",
-    "data_expiry" => "2019-11-12"
-    ],
-    [
-    "picture" => "img/lot-3.jpg",
-    "category" => "$category[1]",
-    "title" => "Крепления Union Contact Pro 2015 года размер L/XL",
-    "prais" => "8000",
-    "data_expiry" => "2019-09-12"
-    ],
-    [
-    "picture" => "img/lot-4.jpg",
-    "category" => "$category[2]",
-    "title" => "Ботинки для сноуборда DC Mutiny Charocal",
-    "prais" => "10999",
-    "data_expiry" => "2019-09-22"
-    ],
-    [
-    "picture" => "img/lot-5.jpg",
-    "category" => "$category[3]",
-    "title" => "Куртка для сноуборда DC Mutiny Charocal",
-    "prais" => "7500",
-    "data_expiry" => "2019-08-14"
-    ],
-    [
-    "picture" => "img/lot-6.jpg",
-    "category" => "$category[4]",
-    "title" => "Маска Oakley Canopy",
-    "prais" => "5400",
-    "data_expiry" => "2019-11-02"
-    ]
-];
+$link = mysqli_connect('localhost', 'root', '', 'YetiCave');
+mysqli_set_charset($link, "utf8");
 
+if (!$link) {
+   print('Ошибка подключения:' . mysqli_connect_error());
+   die();
+}
+
+$sql = 'SELECT name, symbol FROM category';
+$category = db_fetch_data($link, $sql, []);
+
+
+$sql_lots = 'SELECT l.id, l.name, l.image, c.name cat, l.price, l.data_end FROM lots l
+    LEFT JOIN category c ON c.id = l.lots_category
+    ORDER BY l.creation_date DESC';
+$lots = db_fetch_data($link, $sql_lots, []);
 
 
 $page_content = include_template('main.php', [
