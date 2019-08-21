@@ -2,7 +2,8 @@ CREATE DATABASE YetiCave;
   USE YetiCave;
 CREATE TABLE category (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(64)
+  name VARCHAR(64),
+  symbol VARCHAR(64)
 );
 
 CREATE TABLE lots (

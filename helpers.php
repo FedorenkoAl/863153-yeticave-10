@@ -157,6 +157,17 @@ function time_end($time_current,$ts_midnight) {
     return "$hours : $minutes";
 }
 
+function db_fetch_data($link, $sql, $data =[]) {
+    $result = [];
+    $stmt = db_get_prepare_stmt($link, $sql, $data);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    if ($res) {
+        $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    }
+    return($result);
+}
+
 
 
 
