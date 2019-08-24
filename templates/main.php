@@ -21,27 +21,21 @@
             </div>
             <div class="lot__info">
                 <span class="lot__category"><?=htmlspecialchars($value["cat"]);?></span>
-                <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?=htmlspecialchars($value["name"]);?></a></h3>
+                <h3 class="lot__title"><a class="text-link" href="/lot.php?id=<?=$value['id'];?>"><?=htmlspecialchars($value["name"]);?></a></h3>
                 <div class="lot__state">
                     <div class="lot__rate">
                         <span class="lot__amount">Стартовая цена</span>
                         <span class="lot__cost"><?=htmlspecialchars(money($value["price"]));?></span>
                     </div>
-                    <?php if ((strtotime($value['data_end']) - time()) > 3600) :?>
-                    <div class="lot__timer timer">
+                     <?php if ((strtotime($value['data_end']) - time()) <= 0) :?>
+                        <div class="lot__timer timer timer--finishing">
+                      00:00
+                        </div>
+                           <?php else: ?>
+                        <div class="lot__timer timer">
                         <?=time_end(time(),strtotime($value['data_end']));?>
-                    </div>
-                    <?php endif; ?>
-                    <?php if ((strtotime($value['data_end']) - time()) < 3600 && (strtotime($value['data_end']) - time()) > 0) :?>
-                    <div class="lot__timer timer timer--finishing">
-                        <?=time_end(time(),strtotime($value['data_end']));?>
-                    </div>
-                    <?php endif; ?>
-                    <?php if ((strtotime($value['data_end']) - time()) <= 0) :?>
-                    <div class="lot__timer timer timer--finishing">
-                        00:00
-                    </div>
-                    <?php endif; ?>
+                </div>
+                 <?php endif; ?>
                 </div>
             </div>
         </li>
