@@ -7,11 +7,7 @@ $user_name = 'Алексей'; // укажите здесь ваше имя
 
 $link = mysqli_connect('localhost', 'root', '', 'YetiCave');
 mysqli_set_charset($link, "utf8");
-
-if (!$link) {
-   print('Ошибка подключения:' . mysqli_connect_error());
-   die();
-}
+check($link);
 
 $sql = 'SELECT name, symbol FROM category';
 $category = db_fetch_data($link, $sql, []);
