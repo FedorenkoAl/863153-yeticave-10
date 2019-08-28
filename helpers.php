@@ -168,6 +168,17 @@ function db_fetch_data($link, $sql, $data =[]) {
     return($result);
 }
 
+function db_insert_data($link, $sql, $data =[]) {
+
+    $stmt = db_get_prepare_stmt($link, $sql, $data);
+
+    $result = mysqli_stmt_execute($stmt);
+    if ($result) {
+        $result = mysqli_insert_id($link);
+    }
+    return($result);
+}
+
 function db_fetch_data_assos($link, $sql, $data =[]) {
     $result = [];
     $stmt = db_get_prepare_stmt($link, $sql, $data);
@@ -178,6 +189,33 @@ function db_fetch_data_assos($link, $sql, $data =[]) {
     }
     return($result);
 }
+
+function check ($res) {
+    if (!$res) {
+        $error = mysqli_error($link);
+        print('Ошибка MySQL' . $error);
+        die();
+    }
+    return $res;
+}
+
+
+function the_end ($date1,$date2,$date3,$date4,$date5) {
+    if (count($date4)) {
+          $page_add = include_template('add.php', [
+            'category' => $date1,
+            'option' => $date2,
+            'error' => $date3,
+            'errors' => $date4,
+            'dict' => $date5
+             ]);
+         print($page_add);
+         die();
+    }
+        return $page_add;
+}
+
+
 
 
 
