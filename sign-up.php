@@ -31,7 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
          die();
     }
     $sql = "SELECT id FROM user WHERE email = ? LIMIT 1";
-    $result = db_fetch_data($link, $sql, [$_POST['email']]);
+    $result = db_fetch_data_assos($link, $sql, [$_POST['email']]);
+
     if ($result) {
             $errors['email'] = 'form__item--invalid';
             $dict['email'] = 'Пользователь с этим email уже зарегистрирован';
