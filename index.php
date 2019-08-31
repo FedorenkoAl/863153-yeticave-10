@@ -1,5 +1,4 @@
 <?php
-
 require_once ('helpers.php');
 
 $is_auth = rand(0, 1);
