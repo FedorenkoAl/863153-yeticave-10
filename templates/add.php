@@ -20,13 +20,26 @@
             <input class="main-header__search-btn" type="submit" name="find" value="Найти">
           </form>
           <a class="main-header__add-lot button" href="/add.php">Добавить лот</a>
-          <nav class="user-menu">
-            <div class="user-menu__logged">
-              <p>#user_name#</p>
-              <a class="user-menu__bets" href="my-bets.html">Мои ставки</a>
-              <a class="user-menu__logout" href="#">Выход</a>
-            </div>
-          </nav>
+            <?php if (!isset($_SESSION['user'])) :?>
+                    <nav class="user-menu">
+                        <ul class="user-menu__list">
+                            <li class="user-menu__item">
+                                <a href="/sign-up.php">Регистрация</a>
+                            </li>
+                            <li class="user-menu__item">
+                                <a href="/login.php">Вход</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <?php else: ?>
+                    <nav class="user-menu">
+                        <div class="user-menu__logged">
+                            <p><?=$_SESSION['user']['name'];?></p>
+                            <a class="user-menu__bets" href="my-bets.html">Мои ставки</a>
+                              <a class="user-menu__logout" href="/logout.php">Выход</a>
+                        </div>
+                    </nav>
+                    <?php endif; ?>
         </div>
       </header>
       <main>

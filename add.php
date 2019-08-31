@@ -4,6 +4,11 @@ $link = mysqli_connect('localhost', 'root', '', 'YetiCave');
 mysqli_set_charset($link, "utf8");
 check($link);
 
+ if (!isset($_SESSION['user'])) {
+       http_response_code(403);
+         die();
+}
+
 $sql = 'SELECT name FROM category';
 $category = db_fetch_data($link, $sql, []);
 check($category);

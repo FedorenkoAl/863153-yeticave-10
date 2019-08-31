@@ -21,20 +21,29 @@
         <input class="main-header__search-btn" type="submit" name="find" value="Найти">
       </form>
       <a class="main-header__add-lot button" href="/add.php">Добавить лот</a>
-      <nav class="user-menu">
-        <ul class="user-menu__list">
-          <li class="user-menu__item">
-            <a href="/sign-up.php">Регистрация</a>
-          </li>
-          <li class="user-menu__item">
-            <a href="login.html">Вход</a>
-          </li>
-        </ul>
-      </nav>
+       <?php if (!isset($_SESSION['user'])) :?>
+                    <nav class="user-menu">
+                        <ul class="user-menu__list">
+                            <li class="user-menu__item">
+                                <a href="/sign-up.php">Регистрация</a>
+                            </li>
+                            <li class="user-menu__item">
+                                <a href="/login.php">Вход</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <?php else: ?>
+                    <nav class="user-menu">
+                        <div class="user-menu__logged">
+                            <p><?=$_SESSION['user']['name'];?></p>
+                            <a class="user-menu__bets" href="my-bets.html">Мои ставки</a>
+                              <a class="user-menu__logout" href="/logout.php">Выход</a>
+                        </div>
+                    </nav>
+                    <?php endif; ?>
     </div>
   </header>
-
-  <main>
+<main>
     <nav class="nav">
       <ul class="nav__list container">
          <?php foreach ($category as $value): ?>
@@ -69,7 +78,7 @@
       </div>
       <span class="form__error form__error--bottom"><?=$dict['form'];?></span>
       <button type="submit" class="button">Зарегистрироваться</button>
-      <a class="text-link" href="#">Уже есть аккаунт</a>
+      <a class="text-link" href="/login.php">Уже есть аккаунт</a>
     </form>
   </main>
 
