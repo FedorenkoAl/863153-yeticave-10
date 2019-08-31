@@ -14,7 +14,7 @@ $page_add = include_template('add.php', [
      ]);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $required = ['lot-name', 'message', 'lot-rate', 'lot-step', 'lot-date'];
-     $dict = ['lot-name' => 'Введите наименование лота', 'category' => 'Выберете катеорию', 'message' => 'Напишите описание лота', 'lot-rate' => 'Введите начальную цену','lot-step' => 'Введите шаг ставки', 'lot-date' => 'Введите дату завершения торгов'];
+    $dict = ['lot-name' => 'Введите наименование лота', 'category' => 'Выберете катеорию', 'message' => 'Напишите описание лота', 'lot-rate' => 'Введите начальную цену','lot-step' => 'Введите шаг ставки', 'lot-date' => 'Введите дату завершения торгов'];
     $errors = [];
     $error = 'form--invalid';
     foreach ($required as $key) {

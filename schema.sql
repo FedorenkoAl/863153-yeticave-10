@@ -34,6 +34,5 @@ CREATE TABLE user (
   email VARCHAR(128) NOT NULL UNIQUE,
   name VARCHAR(64),
   password VARCHAR(128) NOT NULL UNIQUE,
-  avatar VARCHAR(128),
   contak TINYTEXT
 );
