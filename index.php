@@ -1,9 +1,6 @@
 <?php
 require_once ('helpers.php');
 
-$is_auth = rand(0, 1);
-$user_name = 'Алексей'; // укажите здесь ваше имя
-
 $link = mysqli_connect('localhost', 'root', '', 'YetiCave');
 mysqli_set_charset($link, "utf8");
 check($link);
