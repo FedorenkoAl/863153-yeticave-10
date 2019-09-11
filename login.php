@@ -38,7 +38,7 @@ check($category);
     }
 
 
-    $sql = "SELECT id, name, password FROM user WHERE email = ?";
+    $sql = "SELECT id, name, password, contak FROM user WHERE email = ?";
     $result = db_fetch_data_assos($link, $sql, [$_POST['email']]);
 
         if (!$result) {

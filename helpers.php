@@ -149,6 +149,10 @@ function money ($amount){
     return number_format(ceil($amount),0," "," ") . ' ₽';
 }
 
+function money_step ($amount){
+    return number_format(ceil($amount),0," "," ");
+}
+
 
 function time_end($time_current,$ts_midnight) {
     date_default_timezone_set("Europe/Moscow");
@@ -158,6 +162,16 @@ function time_end($time_current,$ts_midnight) {
 
     return "$hours : $minutes";
 }
+
+function time_end2 ($time_end) {
+    date_default_timezone_set("Europe/Moscow");
+    $dt_end = date_create($time_end);
+    $dt_now = date_create("now");
+    $dt_diff = date_diff($dt_end, $dt_now);
+
+    return $dt_diff;
+}
+
 
 function db_fetch_data($link, $sql, $data =[]) {
     $result = [];
@@ -173,7 +187,6 @@ function db_fetch_data($link, $sql, $data =[]) {
 function db_insert_data($link, $sql, $data =[]) {
 
     $stmt = db_get_prepare_stmt($link, $sql, $data);
-
     $result = mysqli_stmt_execute($stmt);
     if ($result) {
         $result = mysqli_insert_id($link);

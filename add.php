@@ -99,10 +99,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result_category = db_fetch_data_assos($link, $sql_cat_id, [$_POST['category']]);
     check($result_category);
 
-    $sql_lot = 'INSERT INTO lots (creation_date, name, description,image, price, step, lots_category, data_end)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    $sql_lot = 'INSERT INTO lots (creation_date, name, description,image, price, step, lots_category, data_end, author)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
-    $result_lot = db_insert_data($link, $sql_lot, [date('Y.m.d H:i:s'),  $_POST['lot-name'],$_POST['message'], 'uploads/' . $_FILES['lot-img']['name'],  $_POST['lot-rate'],  $_POST['lot-step'], $result_category['id'], $_POST['lot-date']]);
+    $result_lot = db_insert_data($link, $sql_lot, [date('Y.m.d H:i:s'),  $_POST['lot-name'],$_POST['message'], 'uploads/' . $_FILES['lot-img']['name'],  $_POST['lot-rate'],  $_POST['lot-step'], $result_category['id'], $_POST['lot-date'], $_SESSION['user']['id']]);
 
     check($result_lot);
     if ($result_lot) {
