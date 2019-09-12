@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Регистрация</title>
+  <title>Результаты поиска</title>
   <link href="../css/normalize.min.css" rel="stylesheet">
   <link href="../css/style.css" rel="stylesheet">
 </head>
@@ -16,12 +16,12 @@
       <a class="main-header__logo" href="/index.php">
         <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
       </a>
-      <form class="main-header__search" method="get" action="/search.php" autocomplete="off">
-        <input type="search" name="search" placeholder="Поиск лота">
+      <form class="main-header__search" method="get" action="/search.php" autocomplete="on">
+        <input type="search" name="search" placeholder="<?=$search;?>">
         <input class="main-header__search-btn" type="submit" name="find" value="Найти">
       </form>
       <a class="main-header__add-lot button" href="/add.php">Добавить лот</a>
-       <?php if (!isset($_SESSION['user'])) :?>
+      <?php if (!isset($_SESSION['user'])) :?>
                     <nav class="user-menu">
                         <ul class="user-menu__list">
                             <li class="user-menu__item">
@@ -43,7 +43,8 @@
                     <?php endif; ?>
     </div>
   </header>
-<main>
+
+  <main>
     <nav class="nav">
       <ul class="nav__list container">
          <?php foreach ($category as $value): ?>
@@ -51,48 +52,95 @@
               <a href="all-lots.html"><?=$value['name'];?></a>
             </li>
             <?php endforeach; ?>
-        </ul>
+          </ul>
     </nav>
-    <form class="form container <?=$error;?>" action="/sign-up.php" method="post" autocomplete="off"> <!-- form
-    --invalid -->
-      <h2>Регистрация нового аккаунта</h2>
-      <div class="form__item <?=$errors['email'];?>">
-        <label for="email">E-mail <sup>*</sup></label>
-        <input id="email" type="text" name="email" value="<?=htmlspecialchars($_POST['email']);?>" placeholder="Введите e-mail">
-        <span class="form__error"><?=$dict['email'];?></span>
-      </div>
-      <div class="form__item <?=$errors['password'];?>">
-        <label for="password">Пароль <sup>*</sup></label>
-        <input id="password" type="text" name="password" value="<?=htmlspecialchars($_POST['password']);?>" placeholder="Введите пароль">
-        <span class="form__error"><?=$dict['password'];?></span>
-      </div>
-      <div class="form__item <?=$errors['name'];?>">
-        <label for="name">Имя <sup>*</sup></label>
-        <input id="name" type="text" name="name" value="<?=htmlspecialchars($_POST['name']);?>" placeholder="Введите имя">
-        <span class="form__error"><?=$dict['name'];?></span>
-      </div>
-      <div class="form__item <?=$errors['message'];?>">
-        <label for="message">Контактные данные <sup>*</sup></label>
-        <textarea id="message" name="message" placeholder="Напишите как с вами связаться"><?=htmlspecialchars($_POST['message']);?></textarea>
-        <span class="form__error"><?=$dict['message'];?></span>
-      </div>
-      <span class="form__error form__error--bottom"><?=$dict['form'];?></span>
-      <button type="submit" class="button">Зарегистрироваться</button>
-      <a class="text-link" href="/login.php">Уже есть аккаунт</a>
-    </form>
+    <div class="container">
+      <section class="lots">
+        <h2>Результаты поиска по запросу «<span>Union</span>»</h2>
+          <?php if ($lots_item == NULL) :?>
+ <p class="promo__text">Ничего не найдено по вашему запросу</p>
+             <?php else: ?>
+        <ul class="lots__list">
+            <?php foreach ($lots_item as $key => $val): ?>
+          <li class="lots__item lot">
+            <div class="lot__image">
+              <img src="<?=$val["image"]; ?>" width="350" height="260" alt="Сноуборд">
+            </div>
+            <div class="lot__info">
+              <span class="lot__category"><?=htmlspecialchars($val["cat"]);?></span>
+              <h3 class="lot__title"><a class="text-link" href="/lot.php?id=<?=$val['id']; ?>"><?=htmlspecialchars($val["name"]);?></a></h3>
+              <div class="lot__state">
+                <div class="lot__rate">
+                  <span class="lot__amount">Стартовая цена</span>
+                  <span class="lot__cost"><?=htmlspecialchars(money($val["price"]));?></span>
+                </div>
+                <?php if ((strtotime($val['data_end']) - time()) <= 0) :?>
+                <div class="lot__timer timer timer--finishing">
+                  00:00
+                </div>
+                  <?php else: ?>
+                     <div class="lot__timer timer">
+                        <?=time_end(time(),strtotime($val['data_end']));?>
+                    </div>
+                 <?php endif; ?>
+              </div>
+            </div>
+          </li>
+
+           <?php endforeach; ?>
+        </ul>
+        <?php endif; ?>
+      </section>
+         <?php if ($pages_count > 1): ?>
+      <ul class="pagination-list">
+        <?php if (isset($_GET['page'])) :?>
+<li class="pagination-item pagination-item-prev"><a
+
+        <?php if ($_GET['page'] >= 2): ?>
+    href="/search.php?page=<?=($_GET['page'] - 1);?>&search=<?=$search;?>&count=<?=$pages_count;?>"
+    <?php else: ?>
+         <?php endif; ?>
+>Назад</a></li>
+ <?php else: ?>
+    <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
+
+         <?php endif; ?>
+         <?php foreach ($pages as $page): ?>
+     <?php if ($page == $cur_page) :?>
+        <li class="pagination-item pagination-item-active"><a
+><?=$page;?></a></li>
+         <?php else: ?>
+
+        <li class="pagination-item"><a href="/search.php?page=<?=$page;?>&search=<?=$search;?>&count=<?=$pages_count;?>"><?=$page;?></a></li>
+        <?php endif; ?>
+
+          <?php endforeach; ?>
+          <?php if (isset($_GET['page'])) :?>
+<li class="pagination-item pagination-item-next"><a
+ <?php if (($_GET['page'] >= 1) && ($_GET['page'] < $pages_count)) :?>
+  href="/search.php?page=<?=($_GET['page'] + 1);?>&search=<?=$search;?>&count=<?=$pages_count;?>"
+    <?php else: ?>
+<?php endif; ?>
+            >Вперед</a></li>
+            <?php else: ?>
+                <li class="pagination-item pagination-item-next"><a >Вперед</a></li>
+                <?php endif; ?>
+      </ul>
+       <?php endif; ?>
+    </div>
   </main>
 
 </div>
 
 <footer class="main-footer">
   <nav class="nav">
-    <ul class="nav__list container">
-    <?php foreach ($category as $key => $value): ?>
-      <li class="nav__item">
-        <a href="all-lots.html"><?=$value['name'];?></a>
-      </li>
-      <?php endforeach; ?>
-    </ul>
+   <ul class="nav__list container">
+         <?php foreach ($category as $value): ?>
+            <li class="nav__item">
+              <a href="all-lots.html"><?=$value['name'];?></a>
+            </li>
+            <?php endforeach; ?>
+          </ul>
   </nav>
   <div class="main-footer__bottom container">
     <div class="main-footer__copyright">

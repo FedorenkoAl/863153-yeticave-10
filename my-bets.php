@@ -8,7 +8,7 @@ $sql = 'SELECT name, symbol FROM category';
 $category = db_fetch_data($link, $sql, []);
 $lot_active = [];
 $lots_win = [];
- $lots_end =[];
+$lots_end =[];
 
 $sql_rate_lot = "SELECT r.rate_lots FROM rate r
     WHERE r.rate_user = ?
