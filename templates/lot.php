@@ -14,7 +14,7 @@
                     <a class="main-header__logo" href="/index.php">
                         <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
                     </a>
-                    <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru" autocomplete="off">
+                    <form class="main-header__search" method="get" action="/search.php" autocomplete="off">
                         <input type="search" name="search" placeholder="Поиск лота">
                         <input class="main-header__search-btn" type="submit" name="find" value="Найти">
                     </form>
@@ -111,9 +111,9 @@
                                             'минут'). ' ';?>назад
                                         </td>
                                         <?php endif; ?>
-                                        <?php if ((time() - strtotime($valu['date_create'])) > 7200 && (time() - strtotime($valu['date_create'])) != time()):?>
+                                        <?php if ((time() - strtotime($valu['date_create'])) > 3600 && (time() - strtotime($valu['date_create'])) != time()):?>
                                         <td class="history__time">
-                                            <?=date('d.m.Y в h:i',strtotime($valu['date_create']));?>
+                                            <?=date('d.m.Y в H:i',strtotime($valu['date_create']));?>
                                         </td>
                                         <?php endif; ?>
                                     </tr>

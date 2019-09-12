@@ -205,6 +205,17 @@ function db_fetch_data_assos($link, $sql, $data =[]) {
     return($result);
 }
 
+function db_fetch_data_num_rows($link, $sql, $data =[]) {
+    $result = [];
+    $stmt = db_get_prepare_stmt($link, $sql, $data);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    if ($res) {
+        $result = mysqli_num_rows($res);
+    }
+    return($result);
+}
+
 function check ($res) {
     if (!$res) {
         $error = mysqli_error($link);

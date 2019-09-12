@@ -36,3 +36,4 @@ CREATE TABLE user (
   password VARCHAR(128) NOT NULL UNIQUE,
   contak TINYTEXT
 );
+CREATE FULLTEXT INDEX lot_search ON lots (name, description);

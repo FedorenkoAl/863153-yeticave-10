@@ -50,10 +50,7 @@ $lots_id = db_fetch_data_assos($link,$sql_id, [$_GET['id']]);
         $result = db_fetch_data($link, $sql_rates, [$_GET['id']]);
         $count = count($result);
 
-
-
-
- if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $required = ['cost'];
         $dict = ['cost' => 'Введите сумму'];
         $errors = [];
