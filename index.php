@@ -1,5 +1,6 @@
 <?php
 require_once ('helpers.php');
+require_once('getwinner.php');
 
 $link = mysqli_connect('localhost', 'root', '', 'YetiCave');
 mysqli_set_charset($link, "utf8");
