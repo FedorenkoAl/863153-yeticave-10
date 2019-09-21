@@ -1,5 +1,8 @@
 <?php
 require_once ('helpers.php');
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 
 $link = mysqli_connect('localhost', 'root', '', 'YetiCave');
 mysqli_set_charset($link, "utf8");
@@ -52,12 +55,20 @@ $page_items = 1;
 
     }
 
-$search = include_template('search.php', [
+$page = include_template('search.php', [
     'category' => $category,
     'lots_item' => $lots_item,
-    'search' => $search,
     'pages_count' => $pages_count,
+    'search' =>  $search,
     'pages' => $pages,
     'cur_page' => $cur_page
 ]);
-print($search);
+
+$layout_pages = include_template('layout-pages.php',[
+    'page' => $page,
+    'category' => $category,
+    'search' =>  $search,
+    'title' => 'Результаты поиска'
+]);
+print($layout_pages);
+

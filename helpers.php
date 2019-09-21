@@ -226,20 +226,6 @@ function check ($res) {
 }
 
 
-function the_end ($date1,$date2,$date3,$date4,$date5) {
-    if (count($date4)) {
-          $page_add = include_template('add.php', [
-            'category' => $date1,
-            'option' => $date2,
-            'error' => $date3,
-            'errors' => $date4,
-            'dict' => $date5
-             ]);
-         print($page_add);
-         die();
-    }
-        return $page_add;
-}
 
 
 

@@ -16,7 +16,6 @@ CREATE TABLE lots (
   data_end DATETIME,
   step INT NOT NULL,
   author INT,
-  author_winner  INT,
   lots_category INT
 );
 
@@ -34,6 +33,7 @@ CREATE TABLE user (
   email VARCHAR(128) NOT NULL UNIQUE,
   name VARCHAR(64),
   password VARCHAR(128) NOT NULL UNIQUE,
-  contak TINYTEXT
+  contacts TINYTEXT
 );
 CREATE FULLTEXT INDEX lot_search ON lots (name, description);
+ALTER TABLE lots ADD author_winner INT
