@@ -1,0 +1,12 @@
+{
+    "name": "htmlacademy-php/863153-yeticave-10",
+    "authors": [
+        {
+            "name": "Алексей",
+            "email": "alexey712003@list.ru"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}

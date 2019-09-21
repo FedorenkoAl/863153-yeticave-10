@@ -6,6 +6,7 @@ $link = mysqli_connect('localhost', 'root', '', 'YetiCave');
 mysqli_set_charset($link, "utf8");
 check($link);
 
+
 if (isset($_SESSION['user'])) {
     $sql_lot = 'SELECT id, name, author_winner FROM lots WHERE data_end <= NOW()';
     $lot = db_fetch_data($link, $sql_lot, []);
