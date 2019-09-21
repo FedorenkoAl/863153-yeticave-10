@@ -1,10 +1,6 @@
 <?php
 require_once ('helpers.php');
 
-ini_set('error_reporting', E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-
 $link = mysqli_connect('localhost', 'root', '', 'YetiCave');
 mysqli_set_charset($link, "utf8");
 check($link);
@@ -16,6 +12,8 @@ if (!isset($_GET['id']) && !is_numeric($_GET['id']) && !$_GET['id'] > 0) {
     print($content);
     die();
 }
+
+$search = '';
 
 if (isset($_GET['page'])) {
    $search = trim($_GET['search']);
