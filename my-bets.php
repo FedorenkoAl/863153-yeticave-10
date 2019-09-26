@@ -35,11 +35,26 @@ if (!$result) {
     die();;
 }
 
+<<<<<<< HEAD
 foreach ($result as $key => $value) {
     $rate_lots[] = $value['rate_lots'];
 }
 
 $result = array_unique($rate_lots);
+=======
+ $rate_lots_one = array_unique($rate_lots);
+
+foreach ($rate_lots_one as $value) {
+       $sql_lots = "SELECT  l.data_end, l.id, l.image, l.name, c.name cat, r.price, r.date_create FROM lots l
+            LEFT JOIN rate r ON r.rate_lots = $value and r.rate_user = ?
+            LEFT JOIN category c ON c.id = l.lots_category
+            WHERE l.id = $value
+            ORDER BY r.date_create DESC LIMIT 1
+           ";
+        $result = db_fetch_data_assos($link, $sql_lots, [$_SESSION['user']['id']]);
+        $lot_main[] = $result;
+    }
+>>>>>>> 0e4d8ae209e558d2e1f3f11dd4782b5bd3c6ec7c
 
 foreach ($result as $value) {
    $sql = "SELECT  l.data_end, l.id, l.image, l.name, c.name cat, r.price, r.date_create FROM lots l

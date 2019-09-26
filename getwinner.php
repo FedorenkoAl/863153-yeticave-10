@@ -21,6 +21,7 @@ $message = (object)[];
 $mailer = (object)[];
 $result = '';
 
+
 if (isset($_SESSION['user'])) {
     $sql = 'SELECT id, name, author_winner FROM lots WHERE data_end <= NOW()';
     $lot = db_fetch_data($link, $sql, []);
