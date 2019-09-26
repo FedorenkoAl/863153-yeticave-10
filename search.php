@@ -2,58 +2,84 @@
 require_once ('helpers.php');
 
 $link = mysqli_connect('localhost', 'root', '', 'YetiCave');
+if ($link == false) {
+    print("Ошибка: Невозможно подключиться к MySQL " . mysqli_connect_error());
+    die();
+}
 mysqli_set_charset($link, "utf8");
-check($link);
 
-$sql = 'SELECT name, symbol FROM category';
+$sql = 'SELECT id, name FROM category';
 $category = db_fetch_data($link, $sql, []);
 
-$search = trim($_GET['search']);
-
 $page_items = 1;
-    if (!$search && !isset($_GET['page'])) {
-        header('Location: /');
-    }
 
-    if ($search && !isset($_GET['page'])) {
+$page = '';
+$layout_pages = '';
+$lots_item = [];
+$lots = '';
+$search = '';
+$pages_count = 0;
+$cur_page = 0;
+$offset = 0;
+$pages = [];
 
-        $sql_search_lots = "SELECT l.id, l.name, l.image, c.name cat, l.price, l.data_end FROM lots l
-        LEFT JOIN category c ON c.id = l.lots_category
-        WHERE MATCH(l.name, l.description)
-        AGAINST( ? IN BOOLEAN MODE)
-        ORDER BY l.creation_date DESC";
-    $lots_count = db_fetch_data_num_rows($link, $sql_search_lots, [$search]);
+if (isset($_GET['search'])) {
+    $search = trim($_GET['search']);
 
-        $pages_count = ceil($lots_count / $page_items);
+    if (!isset($_GET['page'])) {
         $_GET['page'] = 1;
         $cur_page = $_GET['page'];
+        $sql = "SELECT l.id  FROM lots l
+            LEFT JOIN category c ON c.id = l.lots_category
+            WHERE MATCH(l.name, l.description)
+            AGAINST( ? IN BOOLEAN MODE) and l.data_end >= NOW()
+            ORDER BY l.creation_date DESC";
+        $lots = count(db_fetch_data($link, $sql, [$search]));
+            if ($lots == 0) {
+                $page = include_template('search.php', []);
+                $layout_pages = include_template('layout-pages.php',[
+                'page' => $page,
+                'category' => $category,
+                'search' =>  $search,
+                'title' => 'Результаты поиска'
+                ]);
+                print($layout_pages);
+                 die();
+            }
+        $pages_count = ceil($lots / $page_items);
         $offset = ($cur_page - 1) * $page_items;
         $pages = range(1, $pages_count);
 
-        $lots_item_sql = "SELECT l.id, l.name, l.image, c.name cat, l.price, l.data_end FROM lots l
+        $sql = "SELECT l.id, l.name, l.image, c.name cat, l.price, l.data_end FROM lots l
             LEFT JOIN category c ON c.id = l.lots_category
             WHERE MATCH(l.name, l.description)
-            AGAINST( ? IN BOOLEAN MODE)
+            AGAINST( ? IN BOOLEAN MODE) and l.data_end >= NOW()
             ORDER BY l.creation_date DESC LIMIT 1 OFFSET $offset";
-        $lots_item = db_fetch_data($link, $lots_item_sql, [$search]);
+        $lots_item = db_fetch_data($link, $sql, [$search]);
+
     }
     else  {
-        $search = $_GET['search'];
-       $cur_page = $_GET['page'];
-       $pages_count = $_GET['count'];
-        $offset = ($cur_page - 1) * $page_items;
-        $pages = range(1, $pages_count);
-        $lots_item_sql = "SELECT l.id, l.name, l.image, c.name cat, l.price, l.data_end FROM lots l
-            LEFT JOIN category c ON c.id = l.lots_category
-            WHERE MATCH(l.name, l.description)
-            AGAINST( ? IN BOOLEAN MODE)
-            ORDER BY l.creation_date DESC LIMIT 1 OFFSET $offset";
-            $lots_item = db_fetch_data($link, $lots_item_sql, [$search]);
-
+        if (isset($_GET['count'])) {
+            $pages_count = $_GET['count'];
+            $search = trim($_GET['search']);
+            $cur_page = $_GET['page'];
+            $offset = ($cur_page - 1) * $page_items;
+            $pages = range(1, $pages_count);
+            $sql = "SELECT l.id, l.name, l.image, c.name cat, l.price, l.data_end FROM lots l
+                LEFT JOIN category c ON c.id = l.lots_category
+                WHERE MATCH(l.name, l.description)
+                AGAINST( ? IN BOOLEAN MODE) and l.data_end >= NOW()
+                ORDER BY l.creation_date DESC LIMIT 1 OFFSET $offset";
+            $lots_item = db_fetch_data($link, $sql, [$search]);
+        }
     }
+}
+else {
+    header('Location: /');
+    die();
+}
 
 $page = include_template('search.php', [
-    'category' => $category,
     'lots_item' => $lots_item,
     'pages_count' => $pages_count,
     'search' =>  $search,

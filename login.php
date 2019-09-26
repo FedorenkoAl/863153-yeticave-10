@@ -2,51 +2,51 @@
 require_once ('helpers.php');
 
 $link = mysqli_connect('localhost', 'root', '', 'YetiCave');
+if ($link == false) {
+    print("Ошибка: Невозможно подключиться к MySQL " . mysqli_connect_error());
+    die();
+}
 mysqli_set_charset($link, "utf8");
-check($link);
 
-$search = '';
-$sql = 'SELECT name FROM category';
+$dict = [];
+$errors = [];
+$error = '';
+$result =[];
+
+$sql = 'SELECT id, name FROM category';
 $category = db_fetch_data($link, $sql, []);
-
-if (isset($_GET['page'])) {
-   $search = trim($_GET['search']);
-}
-else {
-    $search = 'Поиск лота';
-}
 
 $page = include_template('login.php', []);
 $layout_pages = include_template('layout-pages.php',[
     'page' => $page,
     'category' => $category,
-    'search' =>  $search,
     'title' => 'Вход'
 ]);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $required = ['email', 'password'];
     $dict = ['email' => 'Введите e-mail', 'password' => 'Введите пароль'];
-    $errors = [];
     $error = 'form--invalid';
-    foreach ($required as $key) {
-        if (empty($_POST[$key])) {
-            $errors[$key] = 'form__item--invalid';
+
+    if (!empty($_POST['email'])) {
+        if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+            $errors['email'] = 'form__item--invalid';
+            $dict['email'] = 'Email должен быт корректным';
+        }
+        else {
+            $sql = "SELECT id, name, password, contacts FROM user WHERE email = ?";
+            $result = db_fetch_data_assos($link, $sql, [$_POST['email']]);
+
+                if (!$result) {
+                    $dict['email'] = 'Неверный email';
+                    $errors['email'] = 'form__item--invalid';
+                }
         }
     }
-
-    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)  && !empty($_POST['email'])){
-        $errors['email'] = 'form__item--invalid';
-        $dict['email'] = 'Email должен быт корректным';
-    }
     else {
-        $sql = "SELECT id, name, password, contacts FROM user WHERE email = ?";
-        $result = db_fetch_data_assos($link, $sql, [$_POST['email']]);
-
-            if (!$result) {
-                $dict['email'] = 'Неверный email';
-                $errors['email'] = 'form__item--invalid';
-            }
+        $errors['email'] = 'form__item--invalid';
+    }
+    if (empty($_POST['password'])) {
+        $errors['password'] = 'form__item--invalid';
     }
 
     if (count($errors)) {
@@ -58,7 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $layout_pages = include_template('layout-pages.php',[
             'page' => $page,
             'category' => $category,
-            'search' =>  $search,
             'title' => 'Вход'
         ]);
         print($layout_pages);
@@ -71,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die();
     }
     else {
-        $dict['password'] = 'Невнерный пароль';
+        $dict['password'] = 'Неверный пароль';
         $errors['password'] = 'form__item--invalid';
         $page = include_template('login.php', [
             'error' => $error,
@@ -81,7 +80,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $layout_pages = include_template('layout-pages.php',[
             'page' => $page,
             'category' => $category,
-            'search' =>  $search,
             'title' => 'Вход'
         ]);
         print($layout_pages);

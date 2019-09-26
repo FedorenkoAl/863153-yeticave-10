@@ -2,53 +2,54 @@
 require_once ('helpers.php');
 
 $link = mysqli_connect('localhost', 'root', '', 'YetiCave');
+if ($link == false) {
+    print("Ошибка: Невозможно подключиться к MySQL " . mysqli_connect_error());
+    die();
+}
 mysqli_set_charset($link, "utf8");
-check($link);
 
-$search = '';
+$required = [];
+$dict = [];
+$errors = [];
+$error = '';
+$result = [];
 
-if (isset($_GET['page'])) {
-   $search = trim($_GET['search']);
-}
-else {
-    $search = 'Поиск лота';
-}
-
-$sql = 'SELECT name FROM category';
+$sql = 'SELECT id, name FROM category';
 $category = db_fetch_data($link, $sql, []);
 
 $page = include_template('sign-up.php', []);
-
 $layout_pages = include_template('layout-pages.php',[
     'page' => $page,
     'category' => $category,
-    'search' =>  $search,
     'title' => 'Регистрация'
 ]);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $required = ['email', 'password', 'name', 'message'];
+    $required = ['password', 'name', 'message'];
     $dict = ['email' => 'Введите e-mail', 'password' => 'Введите пароль', 'name' => 'Введите имя', 'message' => 'Напишите как с вами связаться', 'form' => 'Пожалуйста, исправьте ошибки в форме.'];
-    $errors = [];
-    $error = 'form--invalid';
-
+   $error = 'form--invalid';
 
     foreach ($required as $key) {
         if (empty($_POST[$key])) {
             $errors[$key] = 'form__item--invalid';
         }
     }
-    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)  && !empty($_POST['email'])){
-        $errors['email'] = 'form__item--invalid';
-        $dict['email'] = 'Email должен быт корректным';
+    if (!empty($_POST['email'])) {
+        if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+            $errors['email'] = 'form__item--invalid';
+            $dict['email'] = 'Email должен быт корректным';
+        }
+        else {
+            $sql = "SELECT id FROM user WHERE email = ? LIMIT 1";
+            $result = db_fetch_data_assos($link, $sql, [$_POST['email']]);
+                if ($result) {
+                    $errors['email'] = 'form__item--invalid';
+                    $dict['email'] = 'Пользователь с этим email уже зарегистрирован';
+                }
+        }
     }
     else {
-        $sql = "SELECT id FROM user WHERE email = ? LIMIT 1";
-        $result = db_fetch_data_assos($link, $sql, [$_POST['email']]);
-            if ($result) {
-                $errors['email'] = 'form__item--invalid';
-                $dict['email'] = 'Пользователь с этим email уже зарегистрирован';
-            }
+        $errors['email'] = 'form__item--invalid';
     }
 
     if (count($errors)) {
@@ -60,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $layout_pages = include_template('layout-pages.php',[
             'page' => $page,
             'category' => $category,
-            'search' =>  $search,
             'title' => 'Регистрация'
             ]);
          print($layout_pages);
@@ -69,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $sql = "INSERT INTO user (date_registration, email, name, password, contacts)
     VALUES (?, ?, ?, ?, ?)";
-    $result_email = db_insert_data($link, $sql, [date('Y.m.d H:i:s'), $_POST['email'], $_POST['name'], password_hash($_POST['password'], PASSWORD_DEFAULT), $_POST['message']]);
-    if ($result_email) {
+    $result = db_insert_data($link, $sql, [date('Y.m.d H:i:s'), $_POST['email'], $_POST['name'], password_hash($_POST['password'], PASSWORD_DEFAULT), $_POST['message']]);
+    if ($result) {
         header('Location: /');
         die();
     }

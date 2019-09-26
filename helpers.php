@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -13,9 +15,9 @@
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-session_start();
 
-function is_date_valid(string $date) : bool {
+function is_date_valid(string $date) : bool
+{
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
@@ -31,7 +33,8 @@ function is_date_valid(string $date) : bool {
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function db_get_prepare_stmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
@@ -98,6 +101,7 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  *
  * @return string Рассчитанная форма множественнго числа
  */
+
 function get_noun_plural_form (int $number, string $one, string $two, string $many): string
 {
     $number = (int) $number;
@@ -145,25 +149,65 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-function money ($amount){
+/**
+* Форматирует денежную сумму и добавляет к ней знака рубля.
+*
+* @param int $amount Денежная сумма
+* @return string Отформатированную сумму вместе со знаком рубля.
+*
+*/
+function money ($amount)
+{
     return number_format(ceil($amount),0," "," ") . ' ₽';
 }
 
-function money_step ($amount){
+/**
+* Форматирует денежную сумму без добавления знака рубля.
+*
+* @param int $amount Денежная сумма
+* @return int Отформатированная сумма.
+*
+*/
+function money_step ($amount)
+{
     return number_format(ceil($amount),0," "," ");
 }
 
-
-function time_end($time_current,$ts_midnight) {
+/**
+* Функция возвращает количество целых часов и остатка минут до заданной даты
+*
+* @param int $time_current Текущий timestamp
+* @param int $ts_remaining Заданная дата в виде unix timestamp
+* @return string Количество целых часов и остатка минут в виде строки
+*/
+function time_end($time_current,$ts_remaining)
+{
     date_default_timezone_set("Europe/Moscow");
-    $secs_to_midnight = $ts_midnight - $time_current;
-    $hours = floor($secs_to_midnight / 3600);
-    $minutes = floor(($secs_to_midnight % 3600) / 60);
+    $remaining_time = $ts_remaining - $time_current;
+    $hours = floor($remaining_time / 3600);
+    $minutes = floor(($remaining_time % 3600) / 60);
+    $zero_hour = 0;
+    $zero_minute = 0;
 
-    return "$hours : $minutes";
+        if ($hours < 10) {
+            $zero_hour = 0 . $hours;
+        }
+        else {
+            $zero_hour = $hours;
+        }
+
+        if ($minutes < 10) {
+            $zero_minute = 0 . $minutes;
+        }
+        else {
+            $zero_minute = $minutes;
+        }
+
+    return "$zero_hour : $zero_minute";
 }
 
-function time_end2 ($time_end) {
+function time_end2 ($time_end)
+{
     date_default_timezone_set("Europe/Moscow");
     $dt_end = date_create($time_end);
     $dt_now = date_create("now");
@@ -172,8 +216,18 @@ function time_end2 ($time_end) {
     return $dt_diff;
 }
 
+/**
+ * Функция получает информацию из Базы данных в виде двумерного ассоциативнаго массива
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param $sql string SQL запрос с плейсхолдерами вместо значений
+ * @param array $data Данные для вставки на место плейсхолдеров
+ *
+ * @return array Двумерный ассоциативный массив
+ */
 
-function db_fetch_data($link, $sql, $data =[]) {
+function db_fetch_data($link, $sql, $data =[])
+{
     $result = [];
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     mysqli_stmt_execute($stmt);
@@ -184,8 +238,18 @@ function db_fetch_data($link, $sql, $data =[]) {
     return($result);
 }
 
-function db_insert_data($link, $sql, $data =[]) {
+/**
+ * Функция добавляет новую запись в Базу данных и возвращает идентификатор последней добавленной записи
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param $sql string SQL запрос с плейсхолдерами вместо значений
+ * @param array $data Данные для вставки на место плейсхолдеров
+ *
+ * @return int Идентификатор последней добавленной записи
+ */
 
+function db_insert_data($link, $sql, $data =[])
+{
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     $result = mysqli_stmt_execute($stmt);
     if ($result) {
@@ -194,7 +258,18 @@ function db_insert_data($link, $sql, $data =[]) {
     return($result);
 }
 
-function db_fetch_data_assos($link, $sql, $data =[]) {
+/**
+ * Функция получает информацию из Базы данных в виде одномерного ассоциативнаго массива
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param $sql string SQL запрос с плейсхолдерами вместо значений
+ * @param array $data Данные для вставки на место плейсхолдеров
+ *
+ * @return array Одномерный ассоциативный массив
+ */
+
+function db_fetch_data_assos($link, $sql, $data =[])
+{
     $result = [];
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     mysqli_stmt_execute($stmt);
@@ -205,7 +280,18 @@ function db_fetch_data_assos($link, $sql, $data =[]) {
     return($result);
 }
 
-function db_fetch_data_num_rows($link, $sql, $data =[]) {
+/**
+ * Функция получает количество записей
+ *
+ * @param $link mysqli Ресурс соединения
+ * @param $sql string SQL запрос с плейсхолдерами вместо значений
+ * @param array $data Данные для вставки на место плейсхолдеров
+ *
+ * @return int Количество записей
+ */
+
+function db_fetch_data_num_rows($link, $sql, $data =[])
+{
     $result = [];
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     mysqli_stmt_execute($stmt);
@@ -214,15 +300,6 @@ function db_fetch_data_num_rows($link, $sql, $data =[]) {
         $result = mysqli_num_rows($res);
     }
     return($result);
-}
-
-function check ($res) {
-    if (!$res) {
-        $error = mysqli_error($link);
-        print('Ошибка MySQL' . $error);
-        die();
-    }
-    return $res;
 }
 
 

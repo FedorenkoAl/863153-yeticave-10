@@ -2,17 +2,17 @@
                 <section class="rates container">
                     <h2>Мои ставки</h2>
                     <table class="rates__list">
-                         <?php if ($lot_active) :?>
+                         <?php if (isset($lot_active)) :?>
                         <?php foreach ($lot_active as $valu): ?>
                         <tr class="rates__item">
                             <td class="rates__info">
                                 <div class="rates__img">
                                     <img src="<?=$valu['image'];?>" width="54" height="40" alt="Сноуборд">
                                 </div>
-                                <h3 class="rates__title"><a href="../lot.php?id=<?=$valu['id'];?>"><?=$valu['name'];?></a></h3>
+                                <h3 class="rates__title"><a href="../lot.php?id=<?=$valu['id'];?>"><?=htmlspecialchars($valu['name']);?></a></h3>
                             </td>
                             <td class="rates__category">
-                                <?=$valu['cat'];?>
+                                <?=htmlspecialchars($valu['cat']);?>
                             </td>
                             <td class="rates__timer">
                                 <div class="timer timer">
@@ -20,7 +20,7 @@
                                 </div>
                             </td>
                             <td class="rates__price">
-                                <?=money($valu['price']);?>
+                                <?=htmlspecialchars(money($valu['price']));?>
                             </td>
                             <td class="rates__time">
                                 <?php if ((time() - strtotime($valu['date_create'])) >= 0 && (time() - strtotime($valu['date_create'])) <= 60):?>
@@ -40,7 +40,7 @@
                         <?php endforeach; ?>
                         <?php else: ?>
                               <?php endif; ?>
-                               <?php if ($lots_win) :?>
+                               <?php if (isset($lots_win)) :?>
                         <?php foreach ($lots_win as $valu): ?>
                         <tr class="rates__item rates__item--win">
                             <td class="rates__info">
@@ -48,18 +48,18 @@
                                     <img src="<?=$valu['image'];?>" width="54" height="40" alt="Крепления">
                                 </div>
                                 <div>
-                                    <h3 class="rates__title"><a href="../lot.php?id=<?=$valu['id'];?>"><?=$valu['name'];?></a></h3>
-                                    <p><?=$_SESSION['user']['contacts'];?></p>
+                                    <h3 class="rates__title"><a href="../lot.php?id=<?=$valu['id'];?>"><?=htmlspecialchars($valu['name']);?></a></h3>
+                                    <p><?=htmlspecialchars($_SESSION['user']['contacts']);?></p>
                                 </div>
                             </td>
                             <td class="rates__category">
-                                <?=$valu['cat'];?>
+                                <?=htmlspecialchars($valu['cat']);?>
                             </td>
                             <td class="rates__timer">
                                 <div class="timer timer--win">Ставка выиграла</div>
                             </td>
                             <td class="rates__price">
-                                <?=money($valu['price']);?>
+                                <?=htmlspecialchars(money($valu['price']));?>
                             </td>
                             <td class="rates__time">
                                 <?php if ((time() - strtotime($valu['data_end'])) >= 0 && (time() - strtotime($valu['data_end'])) <= 60):?>
@@ -78,23 +78,23 @@
                         <?php endforeach; ?>
                          <?php else: ?>
                               <?php endif; ?>
-                               <?php if ($lots_end) :?>
+                               <?php if (isset($lots_end)) :?>
                         <?php foreach ($lots_end as $valu): ?>
                         <tr class="rates__item rates__item--end">
                             <td class="rates__info">
                                 <div class="rates__img">
                                     <img src="<?=$valu['image'];?>" width="54" height="40" alt="Куртка">
                                 </div>
-                                <h3 class="rates__title"><a href="../lot.php?id=<?=$valu['id'];?>"><?=$valu['name'];?></a></h3>
+                                <h3 class="rates__title"><a href="../lot.php?id=<?=$valu['id'];?>"><?=htmlspecialchars($valu['name']);?></a></h3>
                             </td>
                             <td class="rates__category">
-                                <?=$valu['cat'];?>
+                                <?=htmlspecialchars($valu['cat']);?>
                             </td>
                             <td class="rates__timer">
                                 <div class="timer timer--end">Торги окончены</div>
                             </td>
                             <td class="rates__price">
-                                <?=money($valu['price']);?>
+                                <?=htmlspecialchars(money($valu['price']));?>
                             </td>
                             <td class="rates__time">
                                 <?php if ((time() - strtotime($valu['data_end'])) >= 0 && (time() - strtotime($valu['data_end'])) <= 60):?>

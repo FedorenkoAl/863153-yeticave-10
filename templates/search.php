@@ -2,7 +2,7 @@
     <div class="container">
       <section class="lots">
         <h2>Результаты поиска по запросу «<span>Union</span>»</h2>
-          <?php if ($lots_item == null) :?>
+          <?php if (!isset($lots_item)) :?>
  <p class="promo__text">Ничего не найдено по вашему запросу</p>
              <?php else: ?>
         <ul class="lots__list">
@@ -34,15 +34,16 @@
 
            <?php endforeach; ?>
         </ul>
-        <?php endif; ?>
+     <?php endif; ?>
       </section>
-         <?php if ($pages_count > 1): ?>
+       <?php if (isset($pages_count) && ($pages_count > 1)): ?>
+
       <ul class="pagination-list">
         <?php if (isset($_GET['page'])) :?>
 <li class="pagination-item pagination-item-prev"><a
 
         <?php if ($_GET['page'] >= 2): ?>
-    href="/search.php?page=<?=($_GET['page'] - 1);?>&search=<?=$search;?>&count=<?=$pages_count;?>"
+    href="/search.php?page=<?=($_GET['page'] - 1);?>&search=<?=htmlspecialchars($search);?>&count=<?=$pages_count;?>"
     <?php else: ?>
          <?php endif; ?>
 >Назад</a></li>
@@ -50,20 +51,22 @@
     <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
 
          <?php endif; ?>
+          <?php if (isset($pages) && isset($cur_page)) :?>
          <?php foreach ($pages as $page): ?>
      <?php if ($page == $cur_page) :?>
         <li class="pagination-item pagination-item-active"><a
 ><?=$page;?></a></li>
          <?php else: ?>
 
-        <li class="pagination-item"><a href="/search.php?page=<?=$page;?>&search=<?=$search;?>&count=<?=$pages_count;?>"><?=$page;?></a></li>
+        <li class="pagination-item"><a href="/search.php?page=<?=$page;?>&search=<?=htmlspecialchars($search);?>&count=<?=$pages_count;?>"><?=$page;?></a></li>
         <?php endif; ?>
 
           <?php endforeach; ?>
+           <?php endif; ?>
           <?php if (isset($_GET['page'])) :?>
 <li class="pagination-item pagination-item-next"><a
  <?php if (($_GET['page'] >= 1) && ($_GET['page'] < $pages_count)) :?>
-  href="/search.php?page=<?=($_GET['page'] + 1);?>&search=<?=$search;?>&count=<?=$pages_count;?>"
+  href="/search.php?page=<?=($_GET['page'] + 1);?>&search=<?=htmlspecialchars($search);?>&count=<?=$pages_count;?>"
     <?php else: ?>
 <?php endif; ?>
             >Вперед</a></li>
@@ -71,6 +74,7 @@
                 <li class="pagination-item pagination-item-next"><a >Вперед</a></li>
                 <?php endif; ?>
       </ul>
+
        <?php endif; ?>
     </div>
 

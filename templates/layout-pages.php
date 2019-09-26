@@ -2,7 +2,9 @@
 <html lang="ru">
   <head>
     <meta charset="UTF-8">
+      <?php if (isset($title)) :?>
     <title><?=$title;?></title>
+      <?php endif; ?>
     <link href="../css/normalize.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
     <link href="../css/flatpickr.min.css" rel="stylesheet">
@@ -16,7 +18,11 @@
             <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
           </a>
           <form class="main-header__search" method="get" action="/search.php" autocomplete="off">
+             <?php if (isset($search)) :?>
             <input type="search" name="search" placeholder="<?=htmlspecialchars($search);?>">
+            <?php else: ?>
+                <input type="search" name="search" placeholder="Поиск лота">
+                 <?php endif; ?>
             <input class="main-header__search-btn" type="submit" name="find" value="Найти">
           </form>
           <a class="main-header__add-lot button" href="/add.php">Добавить лот</a>
@@ -34,7 +40,7 @@
                     <?php else: ?>
                     <nav class="user-menu">
                         <div class="user-menu__logged">
-                            <p><?=$_SESSION['user']['name'];?></p>
+                            <p><?=htmlspecialchars($_SESSION['user']['name']);?></p>
                             <a class="user-menu__bets" href="/my-bets.php">Мои ставки</a>
                               <a class="user-menu__logout" href="/logout.php">Выход</a>
                         </div>
@@ -46,24 +52,30 @@
  <main>
         <nav class="nav">
           <ul class="nav__list container">
+               <?php if (isset($category)) :?>
          <?php foreach ($category as $value): ?>
             <li class="nav__item">
-              <a href="all-lots.html"><?=$value['name'];?></a>
+              <a href="/all-lots.php?id=<?=$value['id'];?>"><?=htmlspecialchars($value['name']);?></a>
             </li>
             <?php endforeach; ?>
+             <?php endif; ?>
           </ul>
         </nav>
+         <?php if (isset($page)) :?>
 <?=$page;?>
+ <?php endif; ?>
        </main>
    </div>
 <footer class="main-footer">
   <nav class="nav">
     <ul class="nav__list container">
+           <?php if (isset($category)) :?>
       <?php foreach ($category as $key => $value): ?>
       <li class="nav__item">
-        <a href="all-lots.html"><?=$value['name'];?></a>
+        <a href="/all-lots.php?id=<?=$value['id'];?>"><?=htmlspecialchars($value['name']);?></a>
       </li>
       <?php endforeach; ?>
+      <?php endif; ?>
     </ul>
   </nav>
   <div class="main-footer__bottom container">
@@ -107,7 +119,7 @@
       </div>
     </div>
   </footer>
-  <!-- <script src="../flatpickr.js"></script>
-  <script src="../script.js"></script> -->
+  <script src="../flatpickr.js"></script>
+  <script src="../script.js"></script>
 </body>
 </html>

@@ -2,11 +2,13 @@
     <h2 class="promo__title">Нужен стафф для катки?</h2>
     <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
     <ul class="promo__list">
+  <?php if (isset($category)) :?>
         <?php foreach ($category as $key => $value): ?>
         <li class="promo__item promo__item--<?=$value['symbol'];?>">
-            <a class="promo__link" href="pages/all-lots.html"><?=$value['name'];?></a>
+            <a class="promo__link" href="/all-lots.php?id=<?=$value['id'];?>"><?=htmlspecialchars($value['name']);?></a>
         </li>
         <?php endforeach ?>
+        <?php endif; ?>
     </ul>
 </section>
 <section class="lots">
@@ -14,6 +16,7 @@
         <h2>Открытые лоты</h2>
     </div>
     <ul class="lots__list">
+         <?php if (isset($lots)) :?>
         <?php foreach ($lots as $key => $value): ?>
         <li class="lots__item lot">
             <div class="lot__image">
@@ -40,5 +43,6 @@
             </div>
         </li>
         <?php endforeach; ?>
+         <?php endif; ?>
     </ul>
 </section>
