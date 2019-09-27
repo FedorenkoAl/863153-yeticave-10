@@ -11,7 +11,7 @@ mysqli_set_charset($link, "utf8");
 $sql = 'SELECT id, name FROM category';
 $category = db_fetch_data($link, $sql, []);
 
-$page_items = 1;
+$page_items = 9;
 
 $page = '';
 $layout_pages = '';
@@ -23,7 +23,7 @@ $cur_page = 0;
 $offset = 0;
 $pages = [];
 
-if (isset($_GET['search'])) {
+if (isset($_GET['search']) && $_GET['search'] !== '') {
     $search = trim($_GET['search']);
 
     if (!isset($_GET['page'])) {
@@ -54,7 +54,7 @@ if (isset($_GET['search'])) {
             LEFT JOIN category c ON c.id = l.lots_category
             WHERE MATCH(l.name, l.description)
             AGAINST( ? IN BOOLEAN MODE) and l.data_end >= NOW()
-            ORDER BY l.creation_date DESC LIMIT 1 OFFSET $offset";
+            ORDER BY l.creation_date DESC LIMIT 9 OFFSET $offset";
         $lots_item = db_fetch_data($link, $sql, [$search]);
 
     }
@@ -69,7 +69,7 @@ if (isset($_GET['search'])) {
                 LEFT JOIN category c ON c.id = l.lots_category
                 WHERE MATCH(l.name, l.description)
                 AGAINST( ? IN BOOLEAN MODE) and l.data_end >= NOW()
-                ORDER BY l.creation_date DESC LIMIT 1 OFFSET $offset";
+                ORDER BY l.creation_date DESC LIMIT 9 OFFSET $offset";
             $lots_item = db_fetch_data($link, $sql, [$search]);
         }
     }
